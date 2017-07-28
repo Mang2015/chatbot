@@ -31,7 +31,7 @@ def messaging_events(payload):
   messaging_events = data["entry"][0]["messaging"]
   for event in messaging_events:
     if "message" in event and "text" in event["message"]:
-      yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
+      yield event["sender"]["id"], "Rohit is gay boi"
     else:
       yield event["sender"]["id"], "I can't echo this"
 
@@ -50,3 +50,5 @@ def send_message(token, recipient, text):
 
 if __name__ == '__main__':
   app.run()
+
+# event["message"]["text"].encode('unicode_escape')
