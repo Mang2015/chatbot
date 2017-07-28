@@ -7,7 +7,7 @@ app = Flask(__name__)
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
 
-PAT = 'EAAZAuhEvzHlYBAADLrSPDOxVCHgkfyYK7omDd0jFIHKVmHCuZBqHqkAwNj5kNRQQsFTr5fp1TbWWAlQ3DoRm2zI9iU8vP2NL5Lo4nSpEUhagDvchugMAeAWlWlZC8JfSuz390ipAgAzVNKA33QdUzenL0SZBdWOZCIAH1ZADFpZCAZDZD'
+PAT = 'EAAZAuhEvzHlYBAPIrUKBlRt0T6futu33Mts2M3jAUINxolBX3ji30tieOyLABsU7dSlujwnQb2DaSWYoKFEt8z2INt2xwIJi8B5AOGmOWtQi1igjzJ7KvcOGVdEGgnZAnM06JGqTCx5a3Bj4SYZC7GjMxZC3efy66cauK1kYUwZDZD'
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -31,7 +31,7 @@ def messaging_events(payload):
   messaging_events = data["entry"][0]["messaging"]
   for event in messaging_events:
     if "message" in event and "text" in event["message"]:
-      yield event["sender"]["id"], "event["message"]["text"].encode('unicode_escape')"
+      yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
     else:
       yield event["sender"]["id"], "I can't echo this"
 
@@ -50,5 +50,3 @@ def send_message(token, recipient, text):
 
 if __name__ == '__main__':
   app.run()
-
-# event["message"]["text"].encode('unicode_escape')
