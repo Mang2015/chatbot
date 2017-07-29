@@ -30,12 +30,14 @@ def messaging_events(payload):
   """
   data = json.loads(payload)
   messaging_events = data["entry"][0]["messaging"]
-
+  last_names = {"Rohit": "Thotakura", "Umang": "Chavan", "Priya": "Rajan", "Bisini": "Panicker"}
   for event in messaging_events:
-    if "message" in event and "Rohit" in event["message"]["text"]:
-      yield event["sender"]["id"], "Thotakura".encode('unicode_escape')
-    else:
-      yield event["sender"]["id"], "I can't echo this".encode('unicode_escape')
+    if "message" in event:
+        for name in last_names:
+            if name in event["message"]["text"]:
+              yield event["sender"]["id"], last_names[name].encode('unicode_escape')
+            else:
+              yield event["sender"]["id"], "I can't echo this".encode('unicode_escape')
 
 
 def send_message(token, recipient, text):
