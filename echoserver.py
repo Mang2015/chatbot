@@ -36,8 +36,8 @@ def messaging_events(payload):
         for name in last_names:
             if name in event["message"]["text"]:
               yield event["sender"]["id"], last_names[name].encode('unicode_escape')
-            else:
-              yield event["sender"]["id"], "I can't echo this".encode('unicode_escape')
+    else:
+        yield event["sender"]["id"], "I can't echo this".encode('unicode_escape')
 
 
 def send_message(token, recipient, text):
