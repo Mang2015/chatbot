@@ -8,7 +8,7 @@ app = Flask(__name__)
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
 
-PAT = 'EAAZAuhEvzHlYBAKPsiPoU4DApZBtfRF4JklUBRpCJzibkgdZA7zPvLOcsqynwSjx02uZCrYXfPQI07ZB0oSH1SXnFlpXZB1tVTQZCahkZCraD5PZBfJykI3654NYsRP0BfLnLz4ae4BaljbKBHyoKzm6gIqGCRTX8JGTpiPaK5SVTGgZDZD'
+PAT = 'EAAZAuhEvzHlYBAN6kiSrZBbGTvBFcVCNf8WLLcYtkvZCZAZAhnCdtAVzJ6ibbLapEJD1iYH0Jpd5QGOg9O4vy0NOZBEiCZAMWWLEbsZCyn6xGapxZB0e770lWEM8knGS48Lg9NOPwQIIlydhOBDWd7JrJ5ZCHfihxoO4TBcCoABdmfpgZDZD'
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -30,9 +30,8 @@ def messaging_events(payload):
   """
   data = json.loads(payload)
   messaging_events = data["entry"][0]["messaging"]
-  print "%s" % messaging_events
   for event in messaging_events:
-    if "message" in event and "text" in event["message"]:
+    if "message" in event and "hi" in event["message"]["text"]:
       yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
     else:
       yield event["sender"]["id"], "I can't echo this"
