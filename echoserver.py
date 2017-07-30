@@ -25,13 +25,13 @@ def handle_verification():
 def handle_messages():
     payload = request.get_data()
 
-    if global_flag == 1:
+    if global global_flag == 1:
         data = json.loads(payload)
         messaging_events = data["entry"][0]["messaging"]
         for event in messaging_events:
             if "message" in event:
-                temp_sender = event["sender"]["id"]
-                temp_message = event["message"]["text"]
+                global temp_sender = event["sender"]["id"]
+                global temp_message = event["message"]["text"]
         return "ok"
     else:
         for sender, message in messaging_events(payload):
@@ -57,32 +57,32 @@ def messaging_events(payload):
             yield event["sender"]["id"], "This is not a recognized command".encode('unicode_escape')
 
 def add_user_info():
-    global_flag = 1
+    global global_flag = 1
     question = "Full name of new entry".encode('unicode_escape')
-    send_message(PAT, temp_sender, question)
+    send_message(PAT, global temp_sender, question)
 
-    new_user = temp_message
+    new_user = global temp_message
 
     question = "What information would you like to store?".encode('unicode_escape')
-    send_message(PAT, sender, question)
+    send_message(PAT, global temp_sender, question)
 
-    information[new_user] = temp_message
+    information[new_user] = global temp_message
 
-    global_flag = 0
+    global global_flag = 0
     return "success"
 
 def list_user_info():
-    global_flag = 1
+    global global_flag = 1
     question = "Full name of user".encode('unicode_escape')
     send_message(PAT, temp_sender, question)
 
     for name in information:
-        if name in temp_message:
+        if name in global temp_message:
           return information[name]
         else:
             continue
 
-    global_flag = 0
+    global global_flag = 0
     return "No such user"
 
 def send_message(token, recipient, text):
