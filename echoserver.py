@@ -8,7 +8,7 @@ app = Flask(__name__)
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
 
-PAT = 'EAAZAuhEvzHlYBAN6kiSrZBbGTvBFcVCNf8WLLcYtkvZCZAZAhnCdtAVzJ6ibbLapEJD1iYH0Jpd5QGOg9O4vy0NOZBEiCZAMWWLEbsZCyn6xGapxZB0e770lWEM8knGS48Lg9NOPwQIIlydhOBDWd7JrJ5ZCHfihxoO4TBcCoABdmfpgZDZD'
+PAT = 'EAAZAuhEvzHlYBAKanMoNoBlKF2pZCeLZATKJOFjkcBAn4c0dy9Mb9cjHCP2X9LF5MnvPuU2MWWzUraBFBorYsyURbuVAbh0PioTNFZAqrQZApd7AWLCzylx2OESdL9RxpvbA2BLF94geswWwrOagX8RlZA0tYeCEAz1aZB0ZCTBqZCwZDZD'
 information = {}
 global_flag = 0
 temp_sender = "hi"
@@ -37,6 +37,7 @@ def handle_messages():
             if "message" in event:
                 temp_sender = event["sender"]["id"]
                 temp_message = event["message"]["text"]
+        return "ok"
 
 
 def messaging_events(payload):
