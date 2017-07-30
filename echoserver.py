@@ -64,10 +64,9 @@ def add_user_info(sender):
     global temp_message
     global information
     global_flag = 1
-    question = "Full name of new entry".encode('unicode_escape')
-    send_message(PAT, sender, question)
+    # question = "Full name of new entry".encode('unicode_escape')
 
-    new_user = temp_message
+    new_user = input(send_message(PAT, sender, "Full name of new entry".encode('unicode_escape')))
 
     question = "What information would you like to store?".encode('unicode_escape')
     send_message(PAT, temp_sender, question)
