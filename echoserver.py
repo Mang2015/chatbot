@@ -10,6 +10,9 @@ app = Flask(__name__)
 
 PAT = 'EAAZAuhEvzHlYBAN6kiSrZBbGTvBFcVCNf8WLLcYtkvZCZAZAhnCdtAVzJ6ibbLapEJD1iYH0Jpd5QGOg9O4vy0NOZBEiCZAMWWLEbsZCyn6xGapxZB0e770lWEM8knGS48Lg9NOPwQIIlydhOBDWd7JrJ5ZCHfihxoO4TBcCoABdmfpgZDZD'
 information = {}
+global_flag = 0
+temp_sender = "hi"
+temp_message = "hi"
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -20,10 +23,21 @@ def handle_verification():
 
 @app.route('/', methods=['POST'])
 def handle_messages():
-  payload = request.get_data()
-  for sender, message in messaging_events(payload):
-    send_message(PAT, sender, message)
-  return "ok"
+    payload = request.get_data()
+
+    if global_flag == 0:
+        for sender, message in messaging_events(payload):
+        send_message(PAT, sender, message)
+        return "ok"
+
+    if global_flag == 1:
+        data = json.loads(payload)
+        messaging_events = data["entry"][0]["messaging"]
+        for event in messaging_events:
+            if "message" in event:
+                temp_sender = event["sender"]["id"]
+                temp_message = event["message"]["text"]
+
 
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
@@ -35,36 +49,41 @@ def messaging_events(payload):
   for event in messaging_events:
     if "message" in event:
         if "add" in event["message"]["text"]:
-            ret_message = add_user_info(event, event["sender"]["id"])
+            ret_message = add_user_info()
         elif "list" in event["message"]["text"]:
-            ret_message = list_user_info(event, event["sender"]["id"])
+            ret_message = list_user_info()
         else:
             yield event["sender"]["id"], "This is not a recognized command".encode('unicode_escape')
             break
         yield event["sender"]["id"], ret_message.encode('unicode_escape')
 
-def add_user_info(event, sender):
-    question = "Full name of new entry"
+def add_user_info():
+    global_flag = 1
+    question = "Full name of new entry".encode('unicode_escape')
+    send_message(PAT, temp_sender, question)
+
+    new_user = temp_message
+
+    question = "What information would you like to store?".encode('unicode_escape')
     send_message(PAT, sender, question)
 
-    new_user = event["message"]["text"]
+    information[new_user] = temp_message
 
-    question = "What information would you like to store?"
-    send_message(PAT, sender, question)
-
-    information[new_user] = event["message"]["text"]
-
+    global_flag = 0
     return "success"
 
-def list_user_info(event, sender):
-    question = "Full name of user"
-    send_message(PAT, sender, question)
-    
+def list_user_info():
+    global_flag = 1
+    question = "Full name of user".encode('unicode_escape')
+    send_message(PAT, temp_sender, question)
+
     for name in information:
-        if name in event["message"]["text"]:
+        if name in temp_message:
           return information[name]
         else:
             continue
+
+    global_flag = 0
     return "No such user"
 
 def send_message(token, recipient, text):
