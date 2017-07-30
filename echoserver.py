@@ -37,8 +37,7 @@ def handle_messages():
                 temp_message = event["message"]["text"]
         return "ok"
     else:
-        for sender, message in messaging_events(payload):
-            send_message(PAT, sender, message)
+        messaging_events(payload)
         return "ok"
 
 def messaging_events(payload):
@@ -52,12 +51,12 @@ def messaging_events(payload):
     if "message" in event:
         if "add" in event["message"]["text"]:
             ret_message = add_user_info()
-            yield event["sender"]["id"], ret_message.encode('unicode_escape')
+            send_message(PAT, event["sender"]["id"], ret_message.encode('unicode_escape'))
         elif "list" in event["message"]["text"]:
             ret_message = list_user_info()
-            yield event["sender"]["id"], ret_message.encode('unicode_escape')
+            send_message(PAT, event["sender"]["id"], ret_message.encode('unicode_escape'))
         else:
-            yield event["sender"]["id"], "This is not a recognized command".encode('unicode_escape')
+            send_message(PAT, event["sender"]["id"], "This is not a recognized command".encode('unicode_escape'))
 
 def add_user_info():
     global global_flag
