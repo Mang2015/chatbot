@@ -51,12 +51,12 @@ def messaging_events(payload):
     if "message" in event:
         if "add" in event["message"]["text"]:
             ret_message = add_user_info()
+            yield event["sender"]["id"], ret_message.encode('unicode_escape')
         elif "list" in event["message"]["text"]:
             ret_message = list_user_info()
+            yield event["sender"]["id"], ret_message.encode('unicode_escape')
         else:
             yield event["sender"]["id"], "This is not a recognized command".encode('unicode_escape')
-            break
-        yield event["sender"]["id"], ret_message.encode('unicode_escape')
 
 def add_user_info():
     global_flag = 1
