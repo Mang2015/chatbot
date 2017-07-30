@@ -39,7 +39,7 @@ def handle_messages():
                 temp_user = event["message"]["text"]
         global_flag = "add user"
         send_message(PAT, temp_sender, "What information would you like to store?".encode('unicode_escape'))
-        return "ok"
+
     elif global_flag == "add user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
@@ -48,8 +48,7 @@ def handle_messages():
                 temp_sender = event["sender"]["id"]
                 temp_message = event["message"]["text"]
         add_user_info()
-        global_flag = 0
-        return "ok"
+        
     elif global_flag == "list user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
@@ -59,10 +58,9 @@ def handle_messages():
                 temp_message = event["message"]["text"]
         list_user_info()
         global_flag = 0
-        return "ok"
+
     else:
         messaging_events(payload)
-        return "ok"
 
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
@@ -74,18 +72,15 @@ def messaging_events(payload):
 
   for event in messaging_events:
     if "message" in event:
-        if "add" in event["message"]["text"]:
+        if "Add" in event["message"]["text"]:
             # ret_message = add_user_info(event["sender"]["id"])
-            print(global_flag)
             global_flag = "store user"
             send_message(PAT, event["sender"]["id"],"Full name of new entry".encode('unicode_escape'))
-        elif "list" in event["message"]["text"]:
-            print(global_flag)
+        elif "List" in event["message"]["text"]:
             # ret_message = list_user_info(event["sender"]["id"])
             global_flag = "list user"
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
         else:
-            print(global_flag)
             send_message(PAT, event["sender"]["id"], "This is not a recognized command".encode('unicode_escape'))
 
 
