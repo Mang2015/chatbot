@@ -30,8 +30,8 @@ def handle_messages():
 
     if global_flag == 1:
         data = json.loads(payload)
-        messaging_events = data["entry"][0]["messaging"]
-        for event in messaging_events:
+        message_events = data["entry"][0]["messaging"]
+        for event in message_events:
             if "message" in event:
                 temp_sender = event["sender"]["id"]
                 temp_message = event["message"]["text"]
@@ -63,6 +63,7 @@ def add_user_info():
     global global_flag
     global temp_sender
     global temp_message
+    global information
     global_flag = 1
     question = "Full name of new entry".encode('unicode_escape')
     send_message(PAT, temp_sender, question)
@@ -81,6 +82,7 @@ def list_user_info():
     global global_flag
     global temp_sender
     global temp_message
+    global information
     global_flag = 1
     question = "Full name of user".encode('unicode_escape')
     send_message(PAT, temp_sender, question)
