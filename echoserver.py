@@ -97,7 +97,7 @@ def add_user_info():
     information[new_user] = temp_message
 
     global_flag = 0
-    return "success"
+    send_message(PAT, temp_user, "success".encode('unicode_escape'))
 
 def list_user_info():
     global global_flag
