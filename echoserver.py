@@ -36,7 +36,7 @@ def handle_messages():
     else:
         for sender, message in messaging_events(payload):
             send_message(PAT, sender, message)
-            return "ok"
+        return "ok"
 
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
