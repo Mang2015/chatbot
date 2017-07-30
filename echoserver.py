@@ -75,17 +75,17 @@ def messaging_events(payload):
   for event in messaging_events:
     if "message" in event:
         if "add" in event["message"]["text"]:
-            print global_flag
             # ret_message = add_user_info(event["sender"]["id"])
+            print(global_flag)
             global_flag = "store user"
             send_message(PAT, event["sender"]["id"],"Full name of new entry".encode('unicode_escape'))
         elif "list" in event["message"]["text"]:
-            print global_flag
+            print(global_flag)
             # ret_message = list_user_info(event["sender"]["id"])
             global_flag = "list user"
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
         else:
-            print global_flag
+            print(global_flag)
             send_message(PAT, event["sender"]["id"], "This is not a recognized command".encode('unicode_escape'))
 
 
@@ -100,7 +100,7 @@ def add_user_info():
     if information[new_user]:
         send_message(PAT, temp_user, "User already exists".encode('unicode_escape'))
         return
-        
+
     information[new_user] = temp_message
 
     global_flag = 0
