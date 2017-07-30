@@ -12,6 +12,7 @@ PAT = 'EAAZAuhEvzHlYBAKanMoNoBlKF2pZCeLZATKJOFjkcBAn4c0dy9Mb9cjHCP2X9LF5MnvPuU2M
 information = {}
 global_flag = 0
 temp_sender = "hi"
+temp_user = "hi"
 temp_message = "hi"
 
 @app.route('/', methods=['GET'])
@@ -27,14 +28,37 @@ def handle_messages():
     global global_flag
     global temp_sender
     global temp_message
+    global temp_user
 
-    if global_flag == 1:
+    if global_flag == "store user":
+        data = json.loads(payload)
+        message_events = data["entry"][0]["messaging"]
+        for event in message_events:
+            if "message" in event:
+                temp_sender = event["sender"]["id"]
+                temp_user = event["message"]["text"]
+        global_flag = "add user"
+        send_message(PAT, temp_sender, "What information would you like to store?".encode('unicode_escape'))
+        return "ok"
+    elif global_flag == "add user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
         for event in message_events:
             if "message" in event:
                 temp_sender = event["sender"]["id"]
                 temp_message = event["message"]["text"]
+        add_user_info()
+        global_flag = 0
+        return "ok"
+    elif global_flag == "list user":
+        data = json.loads(payload)
+        message_events = data["entry"][0]["messaging"]
+        for event in message_events:
+            if "message" in event:
+                temp_sender = event["sender"]["id"]
+                temp_message = event["message"]["text"]
+        list_user_info()
+        global_flag = 0
         return "ok"
     else:
         messaging_events(payload)
@@ -44,55 +68,51 @@ def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
   provided payload.
   """
+  global global_flag
   data = json.loads(payload)
   messaging_events = data["entry"][0]["messaging"]
 
   for event in messaging_events:
     if "message" in event:
         if "add" in event["message"]["text"]:
-            ret_message = add_user_info(event["sender"]["id"])
-            send_message(PAT, event["sender"]["id"], ret_message.encode('unicode_escape'))
+            # ret_message = add_user_info(event["sender"]["id"])
+            global_flag = "store user"
+            send_message(PAT, event["sender"]["id"],"Full name of new entry".encode('unicode_escape'))
         elif "list" in event["message"]["text"]:
-            ret_message = list_user_info(event["sender"]["id"])
-            send_message(PAT, event["sender"]["id"], ret_message.encode('unicode_escape'))
+            # ret_message = list_user_info(event["sender"]["id"])
+            global_flag = "list user"
+            send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
         else:
             send_message(PAT, event["sender"]["id"], "This is not a recognized command".encode('unicode_escape'))
 
-def add_user_info(sender):
+
+def add_user_info():
     global global_flag
     global temp_sender
     global temp_message
+    global temp_user
     global information
-    global_flag = 1
-    # question = "Full name of new entry".encode('unicode_escape')
 
-    new_user = string(input(send_message(PAT, sender, "Full name of new entry".encode('unicode_escape'))))
-
-    question = "What information would you like to store?".encode('unicode_escape')
-    send_message(PAT, temp_sender, question)
-
+    new_user = temp_user
     information[new_user] = temp_message
 
     global_flag = 0
     return "success"
 
-def list_user_info(sender):
+def list_user_info():
     global global_flag
     global temp_sender
     global temp_message
     global information
-    global_flag = 1
-    question = "Full name of user".encode('unicode_escape')
-    send_message(PAT, sender, question)
 
     for name in information:
         if name in temp_message:
-          return information[name]
+          send_message(PAT, temp_sender, information[name].encode("unicode_escape"))
+          return
         else:
             continue
 
-    global_flag = 0
-    return "No such user"
+    send_message(PAT, temp_sender, "No such user".encode("unicode_escape"))
 
 def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
