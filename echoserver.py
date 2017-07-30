@@ -39,7 +39,8 @@ def handle_messages():
                 temp_user = event["message"]["text"]
         global_flag = "add user"
         send_message(PAT, temp_sender, "What information would you like to store?".encode('unicode_escape'))
-
+        return "ok"
+        
     elif global_flag == "add user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
@@ -48,7 +49,8 @@ def handle_messages():
                 temp_sender = event["sender"]["id"]
                 temp_message = event["message"]["text"]
         add_user_info()
-        
+        return "ok"
+
     elif global_flag == "list user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
@@ -58,9 +60,10 @@ def handle_messages():
                 temp_message = event["message"]["text"]
         list_user_info()
         global_flag = 0
-
+        return "ok"
     else:
         messaging_events(payload)
+        return "ok"
 
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
