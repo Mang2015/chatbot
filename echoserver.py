@@ -40,7 +40,7 @@ def handle_messages():
         global_flag = "add user"
         send_message(PAT, temp_sender, "What information would you like to store?".encode('unicode_escape'))
         return "ok"
-        
+
     elif global_flag == "add user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
@@ -95,10 +95,6 @@ def add_user_info():
     global information
 
     new_user = temp_user
-    if information[new_user]:
-        send_message(PAT, temp_user, "User already exists".encode('unicode_escape'))
-        return
-
     information[new_user] = temp_message
 
     global_flag = 0
@@ -113,7 +109,6 @@ def list_user_info():
     for name in information:
         if name in temp_message:
           send_message(PAT, temp_sender, information[name].encode("unicode_escape"))
-          return
         else:
             continue
 
