@@ -25,11 +25,6 @@ def handle_verification():
 def handle_messages():
     payload = request.get_data()
 
-    if global_flag == 0:
-        for sender, message in messaging_events(payload):
-        send_message(PAT, sender, message)
-        return "ok"
-
     if global_flag == 1:
         data = json.loads(payload)
         messaging_events = data["entry"][0]["messaging"]
@@ -38,7 +33,10 @@ def handle_messages():
                 temp_sender = event["sender"]["id"]
                 temp_message = event["message"]["text"]
         return "ok"
-
+    else:
+        for sender, message in messaging_events(payload):
+            send_message(PAT, sender, message)
+            return "ok"
 
 def messaging_events(payload):
   """Generate tuples of (sender_id, message_text) from the
