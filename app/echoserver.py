@@ -11,7 +11,7 @@ import os
 # by the Facebook App that will be created.
 
 PAT = 'EAAZAuhEvzHlYBAKanMoNoBlKF2pZCeLZATKJOFjkcBAn4c0dy9Mb9cjHCP2X9LF5MnvPuU2MWWzUraBFBorYsyURbuVAbh0PioTNFZAqrQZApd7AWLCzylx2OESdL9RxpvbA2BLF94geswWwrOagX8RlZA0tYeCEAz1aZB0ZCTBqZCwZDZD'
-information = {}
+
 global_flag = 0
 temp_sender = "hi"
 temp_user = "hi"
@@ -94,10 +94,10 @@ def add_user_info():
     global temp_sender
     global temp_message
     global temp_user
-    global information
 
-    new_user = temp_user
-    information[new_user] = temp_message
+    new_user = User(temp_user, temp_message)
+    db.session.add(new_user)
+    db.session.commit()
 
     global_flag = 0
     send_message(PAT, temp_user, "success".encode('unicode_escape'))
