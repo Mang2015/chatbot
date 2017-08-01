@@ -1,9 +1,10 @@
 from flask import Flask, request
+from flask_sqlalchemy import SQLAlchemy
 import json
 import requests
 import sys
+import os
 
-app = Flask(__name__)
 
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
