@@ -1,6 +1,6 @@
 from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
 from app import app
+from app.models import *
 import json
 import requests
 import sys
