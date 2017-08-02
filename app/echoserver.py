@@ -108,13 +108,12 @@ def list_user_info():
     global temp_message
     global information
 
-    for name in information:
-        if name in temp_message:
-          send_message(PAT, temp_sender, information[name].encode("unicode_escape"))
-        else:
-            continue
+    user = User.query.filter_by(username = temp_message).first()
 
-    send_message(PAT, temp_sender, "No such user".encode("unicode_escape"))
+    if user:
+      send_message(PAT, temp_sender, user.information.encode("unicode_escape"))
+    else:
+        send_message(PAT, temp_sender, "No such user".encode("unicode_escape"))
 
 def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
