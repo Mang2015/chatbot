@@ -1,2 +1,1 @@
-web: gunicorn echoserver:app
-
+web: gunicorn run:app
