@@ -1,5 +1,5 @@
 from flask import Flask
-import SQLAlchemy
+#from flask_sqlalchemy import SQLAlchemy
 import os
 import sys
 
