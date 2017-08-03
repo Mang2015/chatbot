@@ -141,5 +141,3 @@ def send_message(token, recipient, text):
 
 
 
-if __name__ == '__main__':
-  app.run()
