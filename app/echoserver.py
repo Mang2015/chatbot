@@ -31,8 +31,7 @@ def handle_messages():
     global temp_sender
     global temp_message
     global temp_user
-    data=json.loads(payload)
-    send_message(PAT, data["entry"][0]["messaging"]["sender"]["id"], "here".encode('unicode_escape'))
+   
     
     if global_flag == "store user":
         data = json.loads(payload)
