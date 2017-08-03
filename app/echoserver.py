@@ -88,7 +88,8 @@ def messaging_events(payload):
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
             return
 
-  send_message(PAT, event["sender"]["id"], "This is not a recognized command".encode('unicode_escape'))
+  if global flag == 0:
+    send_message(PAT, event["sender"]["id"], "This is not a recognized command".encode('unicode_escape'))
 
 
 def add_user_info():
