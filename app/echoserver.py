@@ -62,7 +62,6 @@ def handle_messages():
                 temp_sender = event["sender"]["id"]
                 temp_message = event["message"]["text"]
         list_user_info()
-        global_flag = 0
         return "ok"
       
     if global_flag == 0:
@@ -88,6 +87,8 @@ def messaging_events(payload):
             # ret_message = list_user_info(event["sender"]["id"])
             global_flag = "list user"
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
+        elif "Clear" in event["message"]["text"]:
+            clear()
         else:    
             send_message(PAT, event["sender"]["id"], "Not a recognized command".encode('unicode_escape'))
 
@@ -99,7 +100,6 @@ def add_user_info():
 
     user = User.query.filter_by(username = temp_user).first()
     if (user):
-      global_flag = 0
       send_message(PAT, temp_sender, "User already exists".encode('unicode_escape'))
       return
     
@@ -107,7 +107,6 @@ def add_user_info():
     db.session.add(new_user)
     db.session.commit()
 
-    global_flag = 0
     send_message(PAT, temp_sender, "success".encode('unicode_escape'))
 
 def list_user_info():
@@ -123,6 +122,10 @@ def list_user_info():
     else:
       send_message(PAT, temp_sender, "No such user".encode("unicode_escape"))
 
+def clear():
+  global global_flag
+  global_flag = 0
+  
 def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
