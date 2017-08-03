@@ -41,10 +41,9 @@ def handle_messages():
                 temp_user = event["message"]["text"]
         global_flag = "add user"
         send_message(PAT, temp_sender, "What information would you like to store?".encode('unicode_escape'))
-        send_message(PAT, temp_sender, global_flag.encode('unicode_escape'))
         return "ok"
 
-    elif global_flag == "add user":
+    if global_flag == "add user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
         for event in message_events:
@@ -54,7 +53,7 @@ def handle_messages():
         add_user_info()
         return "ok"
 
-    elif global_flag == "list user":
+    if global_flag == "list user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
         for event in message_events:
@@ -64,7 +63,8 @@ def handle_messages():
         list_user_info()
         global_flag = 0
         return "ok"
-    else:
+      
+    if global_flag == 0:
         messaging_events(payload)
         return "ok"
 
@@ -82,14 +82,14 @@ def messaging_events(payload):
             # ret_message = add_user_info(event["sender"]["id"])
             global_flag = "store user"
             send_message(PAT, event["sender"]["id"],"Full name of new entry".encode('unicode_escape'))
-            break
+
     
         elif "List" in event["message"]["text"]:
             # ret_message = list_user_info(event["sender"]["id"])
             global_flag = "list user"
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
             send_message(PAT, event["sender"]["id"], global_flag.encode('unicode_escape'))
-            break
+
 
   if global_flag == 0:
     send_message(PAT, event["sender"]["id"], "This is not a recognized command".encode('unicode_escape'))
