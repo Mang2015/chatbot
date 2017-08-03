@@ -83,17 +83,13 @@ def messaging_events(payload):
             # ret_message = add_user_info(event["sender"]["id"])
             global_flag = "store user"
             send_message(PAT, event["sender"]["id"],"Full name of new entry".encode('unicode_escape'))
-
-    
+            
         elif "List" in event["message"]["text"]:
             # ret_message = list_user_info(event["sender"]["id"])
             global_flag = "list user"
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
-
-  if global_flag == 0:
-    send_message(PAT, event["sender"]["id"], "This is not a recognized command".encode('unicode_escape'))
-    message_events = ''
-
+        else:    
+            send_message(PAT, event["sender"]["id"], "Not a recognized command".encode('unicode_escape'))
 
 def add_user_info():
     global global_flag
