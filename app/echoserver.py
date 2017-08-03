@@ -100,7 +100,7 @@ def add_user_info():
     db.session.commit()
 
     global_flag = 0
-    send_message(PAT, temp_user, "success".encode('unicode_escape'))
+    send_message(PAT, temp_sender, "success".encode('unicode_escape'))
 
 def list_user_info():
     global global_flag
