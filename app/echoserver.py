@@ -31,7 +31,9 @@ def handle_messages():
     global temp_sender
     global temp_message
     global temp_user
-
+    data=json.loads(payload)
+    send_message(PAT, data["entry"][0]["messaging"]["sender"]["id"], "here".encode('unicode_escape'))
+    
     if global_flag == "store user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
@@ -74,7 +76,7 @@ def messaging_events(payload):
   """
   global global_flag
   data = json.loads(payload)
-  messaging_events = data["entry"][0]["messaging"]
+  event = data["entry"][0]["messaging"]
 
   for event in messaging_events:
     if "message" in event:
@@ -88,8 +90,6 @@ def messaging_events(payload):
             # ret_message = list_user_info(event["sender"]["id"])
             global_flag = "list user"
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
-            send_message(PAT, event["sender"]["id"], global_flag.encode('unicode_escape'))
-
 
   if global_flag == 0:
     send_message(PAT, event["sender"]["id"], "This is not a recognized command".encode('unicode_escape'))
