@@ -82,13 +82,13 @@ def messaging_events(payload):
             # ret_message = add_user_info(event["sender"]["id"])
             global_flag = "store user"
             send_message(PAT, event["sender"]["id"],"Full name of new entry".encode('unicode_escape'))
-            send_message(PAT, temp_sender, global_flag.encode('unicode_escape'))
+            send_message(PAT, event["sender"]["id"], global_flag.encode('unicode_escape'))
             return
         elif "List" in event["message"]["text"]:
             # ret_message = list_user_info(event["sender"]["id"])
             global_flag = "list user"
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
-            send_message(PAT, temp_sender, global_flag.encode('unicode_escape'))
+            send_message(PAT, event["sender"]["id"], global_flag.encode('unicode_escape'))
             return
 
   if global_flag == 0:
