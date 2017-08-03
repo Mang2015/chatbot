@@ -75,9 +75,9 @@ def messaging_events(payload):
   """
   global global_flag
   data = json.loads(payload)
-  messaging_events = data["entry"][0]["messaging"]
+  message_events = data["entry"][0]["messaging"]
 
-  for event in messaging_events:
+  for event in message_events:
     if "message" in event:
         if "Add" in event["message"]["text"]:
             # ret_message = add_user_info(event["sender"]["id"])
