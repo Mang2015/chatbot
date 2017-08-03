@@ -95,6 +95,12 @@ def add_user_info():
     global temp_message
     global temp_user
 
+    user = User.query.filter_by(username = temp_message).first()
+    if (user):
+      global_flag = 0
+      send_message(PAT, temp_sender, "User already exists".encode('unicode_escape'))
+      return
+    
     new_user = User(temp_user, temp_message)
     db.session.add(new_user)
     db.session.commit()
@@ -113,7 +119,7 @@ def list_user_info():
     if user:
       send_message(PAT, temp_sender, user.information.encode("unicode_escape"))
     else:
-        send_message(PAT, temp_sender, "No such user".encode("unicode_escape"))
+      send_message(PAT, temp_sender, "No such user".encode("unicode_escape"))
 
 def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
