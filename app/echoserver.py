@@ -95,7 +95,7 @@ def add_user_info():
     global temp_message
     global temp_user
 
-    user = User.query.filter_by(username = temp_message).first()
+    user = User.query.filter_by(username = temp_user).first()
     if (user):
       global_flag = 0
       send_message(PAT, temp_sender, "User already exists".encode('unicode_escape'))
