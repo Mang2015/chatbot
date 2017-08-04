@@ -36,7 +36,7 @@ def handle_messages():
     if global_flag == "store_user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
-        event = message_events[0]
+        for event in message_events:
           if "message" in event:
               temp_sender = event["sender"]["id"]
               temp_user = event["message"]["text"]
@@ -47,7 +47,7 @@ def handle_messages():
     if global_flag == "add_user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
-        event = message_events[0]
+        for event in message_events:
           if "message" in event:
               temp_sender = event["sender"]["id"]
               temp_message = event["message"]["text"]
@@ -57,7 +57,7 @@ def handle_messages():
     if global_flag == "list_user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
-        event = message_events[0]
+        for event in message_events:
           if "message" in event:
               temp_sender = event["sender"]["id"]
               temp_message = event["message"]["text"]
@@ -76,7 +76,7 @@ def messaging_events(payload):
   data = json.loads(payload)
   message_events = data["entry"][0]["messaging"]
 
-  event = message_events[0]
+  for event in message_events:
     if "message" in event:
         if "Add" in event["message"]["text"]:
             # ret_message = add_user_info(event["sender"]["id"])
