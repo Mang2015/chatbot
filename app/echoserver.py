@@ -5,13 +5,12 @@ import json
 import requests
 import sys
 import os
-
+import web
 
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
 
 PAT = 'EAAZAuhEvzHlYBAKanMoNoBlKF2pZCeLZATKJOFjkcBAn4c0dy9Mb9cjHCP2X9LF5MnvPuU2MWWzUraBFBorYsyURbuVAbh0PioTNFZAqrQZApd7AWLCzylx2OESdL9RxpvbA2BLF94geswWwrOagX8RlZA0tYeCEAz1aZB0ZCTBqZCwZDZD'
-
 global_flag = 0
 temp_sender = "hi"
 temp_user = "hi"
@@ -80,7 +79,7 @@ def messaging_events(payload):
     if "message" in event:
         if "Add" in event["message"]["text"]:
             # ret_message = add_user_info(event["sender"]["id"])
-            store_user_name()
+            global_flag = "store_user"
             send_message(PAT, event["sender"]["id"],"Full name of new entry".encode('unicode_escape'))
 
         elif "List" in event["message"]["text"]:
