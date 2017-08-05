@@ -87,7 +87,8 @@ def messaging_events(payload):
             global_flag = "list_user"
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
         else:
-            messaging_events(payload)
+            send_message(PAT, event["sender"]["id"], "Not a recognized command".encode('unicode_escape'))
+
 
 
 def add_user_info():
