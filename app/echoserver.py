@@ -80,7 +80,7 @@ def messaging_events(payload):
     if "message" in event:
         if "Add" in event["message"]["text"]:
             # ret_message = add_user_info(event["sender"]["id"])
-            global_flag = "store_user"
+            store_user_name()
             send_message(PAT, event["sender"]["id"],"Full name of new entry".encode('unicode_escape'))
 
         elif "List" in event["message"]["text"]:
@@ -88,7 +88,8 @@ def messaging_events(payload):
             global_flag = "list_user"
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
         else:
-          handle_messages()
+            messaging_events(payload)
+
 
 def add_user_info():
     global global_flag
@@ -123,6 +124,9 @@ def list_user_info():
     else:
       global_flag = 0
       send_message(PAT, temp_sender, "No such user".encode("unicode_escape"))
+
+def requeue(text):
+    if global_flag == "store_user" or global_flag == "list_user" or global_flag == "add_user":
 
 
 def send_message(token, recipient, text):
