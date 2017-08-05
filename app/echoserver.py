@@ -124,9 +124,6 @@ def list_user_info():
       global_flag = 0
       send_message(PAT, temp_sender, "No such user".encode("unicode_escape"))
 
-def requeue(text):
-    if global_flag == "store_user" or global_flag == "list_user" or global_flag == "add_user":
-
 
 def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
