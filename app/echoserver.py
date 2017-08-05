@@ -31,8 +31,8 @@ def handle_messages():
     global temp_sender
     global temp_message
     global temp_user
-   
-    
+
+
     if global_flag == "store_user":
         data = json.loads(payload)
         message_events = data["entry"][0]["messaging"]
@@ -63,7 +63,7 @@ def handle_messages():
               temp_message = event["message"]["text"]
         list_user_info()
         return "ok"
-      
+
     if global_flag == 0:
         messaging_events(payload)
         return "ok"
@@ -87,8 +87,8 @@ def messaging_events(payload):
             # ret_message = list_user_info(event["sender"]["id"])
             global_flag = "list_user"
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
-        else: 
-          continue
+        else:
+          handle_messages()
 
 def add_user_info():
     global global_flag
@@ -101,7 +101,7 @@ def add_user_info():
       global_flag = 0
       send_message(PAT, temp_sender, "User already exists".encode('unicode_escape'))
       return
-    
+
     new_user = User(temp_user, temp_message)
     db.session.add(new_user)
     db.session.commit()
@@ -114,7 +114,7 @@ def list_user_info():
     global temp_sender
     global temp_message
     global information
-    
+
     user = User.query.filter_by(username = temp_message).first()
 
     if user:
@@ -124,7 +124,7 @@ def list_user_info():
       global_flag = 0
       send_message(PAT, temp_sender, "No such user".encode("unicode_escape"))
 
-  
+
 def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
   """
@@ -136,6 +136,3 @@ def send_message(token, recipient, text):
       "message": {"text": text.decode('unicode_escape')}
     }),
     headers={'Content-type': 'application/json'})
-
-
-
