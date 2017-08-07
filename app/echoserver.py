@@ -33,47 +33,46 @@ def handle_messages():
 
     current_state = State.query.first()
 
-    if current_state.information == "store_user":
-        data = json.loads(payload)
-        message_events = data["entry"][0]["messaging"]
-        for event in message_events:
-          if "message" in event:
-              temp_sender = event["sender"]["id"]
-              temp_user = event["message"]["text"]
-        db.session.delete(current_state)
-        db.session.commit()
-        new_state = State("add_user")
-        db.session.add(new_state)
-        db.session.commit()
-        send_message(PAT, temp_sender, "What information would you like to store?".encode('unicode_escape'))
-        return "ok"
+    if current_state:
 
-    if current_state.information == "add_user":
-        data = json.loads(payload)
-        message_events = data["entry"][0]["messaging"]
-        for event in message_events:
-          if "message" in event:
-              temp_sender = event["sender"]["id"]
-              temp_message = event["message"]["text"]
-        add_user_info(current_state)
-        db.session.delete(current_state)
-        db.session.commit()
-        new_state = State("0")
-        db.session.add(new_state)
-        db.session.commit()
-        return "ok"
+        if current_state.information == "store_user":
+            data = json.loads(payload)
+            message_events = data["entry"][0]["messaging"]
+            for event in message_events:
+              if "message" in event:
+                  temp_sender = event["sender"]["id"]
+                  temp_user = event["message"]["text"]
+            db.session.delete(current_state)
+            db.session.commit()
+            new_state = State("add_user")
+            db.session.add(new_state)
+            db.session.commit()
+            send_message(PAT, temp_sender, "What information would you like to store?".encode('unicode_escape'))
+            return "ok"
 
-    if current_state.information == "list_user":
-        data = json.loads(payload)
-        message_events = data["entry"][0]["messaging"]
-        for event in message_events:
-          if "message" in event:
-              temp_sender = event["sender"]["id"]
-              temp_message = event["message"]["text"]
-        list_user_info(current_state)
-        return "ok"
+        if current_state.information == "add_user":
+            data = json.loads(payload)
+            message_events = data["entry"][0]["messaging"]
+            for event in message_events:
+              if "message" in event:
+                  temp_sender = event["sender"]["id"]
+                  temp_message = event["message"]["text"]
+            add_user_info(current_state)
+            db.session.delete(current_state)
+            db.session.commit()
+            return "ok"
 
-    if current_state.information == 0:
+        if current_state.information == "list_user":
+            data = json.loads(payload)
+            message_events = data["entry"][0]["messaging"]
+            for event in message_events:
+              if "message" in event:
+                  temp_sender = event["sender"]["id"]
+                  temp_message = event["message"]["text"]
+            list_user_info(current_state)
+            return "ok"
+
+    else:
         messaging_events(payload)
         return "ok"
 
@@ -84,14 +83,11 @@ def messaging_events(payload):
   global global_flag
   data = json.loads(payload)
   message_events = data["entry"][0]["messaging"]
-  current_state = State.query.first()
 
   for event in message_events:
     if "message" in event:
         if "Add" in event["message"]["text"]:
             # ret_message = add_user_info(event["sender"]["id"])
-            db.session.delete(current_state)
-            db.session.commit()
             new_state = State("store_user")
             db.session.add(new_state)
             db.session.commit()
@@ -99,8 +95,6 @@ def messaging_events(payload):
 
         elif "List" in event["message"]["text"]:
             # ret_message = list_user_info(event["sender"]["id"])
-            db.session.delete(current_state)
-            db.session.commit()
             new_state = State("list_user")
             db.session.add(new_state)
             db.session.commit()
@@ -119,9 +113,6 @@ def add_user_info(curr_state):
     user = User.query.filter_by(username = temp_user).first()
     if (user):
       db.session.delete(curr_state)
-      db.session.commit()
-      new_state = State("0")
-      db.session.add(new_state)
       db.session.commit()
 
       send_message(PAT, temp_sender, "User already exists".encode('unicode_escape'))
@@ -148,9 +139,7 @@ def list_user_info(curr_state):
 
     db.session.delete(curr_state)
     db.session.commit()
-    new_state = State("0")
-    db.session.add(new_state)
-    db.session.commit()
+
 
 def send_message(token, recipient, text):
   """Send the message text to recipient with id recipient.
