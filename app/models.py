@@ -13,8 +13,7 @@ class User(db.Model):
 
 class State(db.Model):
     sid = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    s_info = db.Column(db.Unicode(1024))
+    information = db.Column(db.Unicode(1024))
 
     def __init__(self, s_info):
         self.s_info = s_info
-        

@@ -34,7 +34,6 @@ def handle_messages():
     current_state = State.query.first()
 
     if current_state:
-
         if current_state.information == "store_user":
             data = json.loads(payload)
             message_events = data["entry"][0]["messaging"]
@@ -71,7 +70,6 @@ def handle_messages():
                   temp_message = event["message"]["text"]
             list_user_info(current_state)
             return "ok"
-
     else:
         messaging_events(payload)
         return "ok"
