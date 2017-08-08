@@ -131,7 +131,8 @@ def list_user_info(curr_state):
     user = User.query.filter_by(username = temp_message).first()
 
     if user:
-      send_message(PAT, 385918618477389, user.information.encode("unicode_escape"))
+      send_message(PAT, temp_sender, temp_sender.encode("unicode_escape"))
+      send_message(PAT, temp_sender, user.information.encode("unicode_escape"))
     else:
       send_message(PAT, temp_sender, "No such user".encode("unicode_escape"))
 
