@@ -15,5 +15,5 @@ class State(db.Model):
     sid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     information = db.Column(db.Unicode(1024))
 
-    def __init__(self, s_info):
-        self.s_info = s_info
+    def __init__(self, information):
+        self.information = information
