@@ -31,7 +31,7 @@ def handle_messages():
     global temp_message
     global temp_user
 
-    current_state = State.query.first()
+    current_state = State.query.filter_by(sid = 1).first()
 
     if current_state:
         if current_state.information == "store_user":
