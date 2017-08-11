@@ -81,7 +81,7 @@ def handle_messages():
             db.session.delete(current_state)
             db.session.commit()
             new_state = State("edit_user_info")
-            db.session.add("edit_user_info")
+            db.session.add(new_state)
             db.session.commit()
             send_message(PAT, temp_sender, "What new information would you like to store".encode('unicode_escape'))
             return "ok"
