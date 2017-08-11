@@ -7,7 +7,7 @@ class User(db.Model):
     username = db.Column(db.Unicode(32), unique=True, nullable=False)
     information = db.Column(db.Unicode(1024))
 
-    def __init__(self, username, information, ylink):
+    def __init__(self, username, information):
         self.username = username
         self.information = information
 
