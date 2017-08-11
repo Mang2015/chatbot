@@ -70,6 +70,34 @@ def handle_messages():
                   temp_message = event["message"]["text"]
             list_user_info(current_state)
             return "ok"
+
+        if current_state.information == "edit_user":
+            data = json.loads(payload)
+            message_events = data["entry"][0]["messaging"]
+            for event in message_events:
+                if "message" in event:
+                    temp_sender = event["sender"]["id"]
+                    temp_user = event["message"]["text"]
+            db.session.delete(current_state)
+            db.session.commit()
+            new_state = State("edit_user_info")
+            db.session.add("edit_user_info")
+            db.sessin.commit()
+            send_message(PAT, temp_sender, "What new information would you like to store".encode('unicode_escape'))
+            return "ok"
+
+        if current_state.information == "edit_user_info":
+            data = json.loads(payload)
+            message_events = data["entry"][0]["messaging"]
+            for event in message_events:
+                if "message" in event:
+                    temp_sender = event["sender"]["id"]
+                    temp_message = event["message"]["text"]
+            edit_user_info(current_state)
+            db.session.delete(current_state)
+            db.session.commit()
+            return "ok"
+
     else:
         messaging_events(payload)
         return "ok"
@@ -97,6 +125,13 @@ def messaging_events(payload):
             db.session.add(new_state)
             db.session.commit()
             send_message(PAT, event["sender"]["id"], "Full name of user".encode('unicode_escape'))
+
+        elif "Edit" in event["message"]["text"]:
+            new_state = State("edit_user")
+            db.session.add(new_state)
+            db.session.commit()
+            send_message(PAT, event["sender"]["id"], "Name of user to edit".encode('unicode_escape'))
+
         else:
             send_message(PAT, event["sender"]["id"], "Not a recognized command".encode('unicode_escape'))
 
@@ -119,8 +154,10 @@ def add_user_info(curr_state):
     new_user = User(temp_user, temp_message)
     db.session.add(new_user)
     db.session.commit()
+    db.session.delete(curr_state)
+    db.session.commit()
 
-    send_message(PAT, temp_sender, "success".encode('unicode_escape'))
+    send_message(PAT, temp_sender, "Success".encode('unicode_escape'))
 
 def list_user_info(curr_state):
 
@@ -137,6 +174,24 @@ def list_user_info(curr_state):
 
     db.session.delete(curr_state)
     db.session.commit()
+
+def edit_user_info(curr_state):
+
+    global temp_sender
+    global temp_message
+    global temp_user
+
+    user = User.query.filter_by(username = temp_user).first()
+    if (user):
+      user.information = temp_message
+      send_message(PAT, temp_sender, "Success".encode('unicode_escape'))
+      return
+
+    db.session.delete(curr_state)
+    db.session.commit()
+
+    send_message(PAT, temp_sender, "User does not exist".encode('unicode_escape'))
+    return
 
 
 def send_message(token, recipient, text):
